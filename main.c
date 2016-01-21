@@ -45,7 +45,8 @@ int		ft_strlen(char *s)
 int		key_hook(int keycode, t_env *e)
 {
 	// printf("%i\n", keycode);
-	if (keycode == 0)
+	(void)e;
+	if (keycode == 53)
 		exit (0);
 	return (0);
 }
@@ -66,6 +67,7 @@ int		main(int ac, char **av)
 	{
 		PUT_STRING(2, "Error\nUsage: ");
 		write(2, av[0], ft_strlen(av[0]));
+		PUT_STRING(2, " Julia, Mandelbrot or Modulo");
 		PUT_STRING(2, "\n");
 	}
 	return (0);
