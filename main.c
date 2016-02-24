@@ -10,7 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include <fractol.h>
+
+void	put_image(t_env *e, int x, int y)
+{
+	if (x <= 0 || x >= e->win_y || y <= 0 || y >= e->win_x)
+		return ;
+	*(e->data + x * e->size_line + e->bpp / 8 * y) = e->b;
+	*(e->data + x * e->size_line + e->bpp / 8 * y + 1) = e->g;
+	*(e->data + x * e->size_line + e->bpp / 8 * y + 2) = e->r;
+}
 
 void	init_struct(t_env *e)
 {
@@ -26,9 +36,9 @@ void	init_struct(t_env *e)
 	e->data = mlx_get_data_addr(e->img, &e->bpp, &e->size_line, &e->endian);
 }
 
-int		put_img_to_win(void)
+int		put_img_to_win(t_env *e)
 {
-	// mlx_put_image_to_window(e->mlx, e->win, e->img, 0, 0);
+	mlx_put_image_to_window(e->mlx, e->win, e->img, 0, 0);
 	return(0);
 }
 
@@ -50,6 +60,33 @@ int		key_hook(int keycode, t_env *e)
 		exit (0);
 	return (0);
 }
+
+void	color(t_env *e)
+{
+	e->r = 0xFF;
+	e->g = 0x66;
+	e->b = 0xFF;
+}
+
+void	draw(t_env *e)
+{
+	int		y;
+	int		x;
+
+	y = 0;
+	while (y < e->win_x)
+	{
+		x = 0;
+		while (x < e->win_y)
+		{
+			color(e);
+			put_image(e, x, y);
+			x++;
+		}
+		y++;
+	}
+}
+
 int		main(int ac, char **av)
 {
 	t_env	e;
@@ -57,9 +94,9 @@ int		main(int ac, char **av)
 	if (ac == 3 || ac == 2)
 	{
 		init_struct(&e);
-		mlx_hook(e.win, 2, 3, key_hook, &e);
 		// mlx_mouse_hook(e.win, mouse_hook, &e);
-		// put_img_to_win(&e);
+		draw(&e);	
+		mlx_hook(e.win, 2, 3, key_hook, &e);
 		mlx_expose_hook(e.win, put_img_to_win, &e);
 		mlx_loop(e.mlx);
 	}

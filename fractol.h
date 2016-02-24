@@ -14,6 +14,7 @@
 # define FRACTOL_H
 
 # include <stdlib.h>
+# include <stdio.h>
 # include <mlx.h>
 # include <unistd.h>
 # define WIDTH 600
@@ -22,12 +23,15 @@
 
 typedef struct		s_env
 {
+	int				r;
+	int				g;
+	int				b;
 	void			*mlx;
 	void			*win;
 	int				win_y;
 	int				win_x;
 	void			*img;
-	void			*data;
+	char			*data;
 	int				bpp;
 	int				size_line;
 	int				endian;

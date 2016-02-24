@@ -11,7 +11,7 @@ MINILIBX = -I./minilibx_macos minilibx_macos/libmlx.a
 all: $(MINILIBX) $(NAME)
 
 $(NAME):
-	@cc $(FLAGS) $(LFLAGS) $(MINILIBX) $(SCR) -o $(NAME)
+	cc $(FLAGS) $(LFLAGS) $(MINILIBX) $(SCR) -o $(NAME)
 
 $(MINILIBX):
 	@make -C minilibx_macos/
