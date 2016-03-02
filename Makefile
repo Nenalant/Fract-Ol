@@ -1,7 +1,7 @@
 
 NAME = fractol
 
-SCR = main.c
+SRC = main.c
 
 FLAGS = -Wall -Wextra -Werror -I./
 LFLAGS = -framework OpenGL -framework Appkit
@@ -11,7 +11,7 @@ MINILIBX = -I./minilibx_macos minilibx_macos/libmlx.a
 all: $(MINILIBX) $(NAME)
 
 $(NAME):
-	cc $(FLAGS) $(LFLAGS) $(MINILIBX) $(SCR) -o $(NAME)
+	cc $(FLAGS) $(LFLAGS) $(MINILIBX) $(SRC) -o $(NAME)
 
 $(MINILIBX):
 	@make -C minilibx_macos/
