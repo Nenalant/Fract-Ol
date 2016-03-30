@@ -29,10 +29,8 @@ typedef struct 		s_fr
 	double			x2;
 	double			y1;
 	double			y2;
-	unsigned int	zoom;
 	unsigned int	img_x;
 	unsigned int	img_y;
-
 	unsigned int	i_max;
 	double			c_r;
 	double			c_i;
@@ -43,20 +41,31 @@ typedef struct 		s_fr
 	unsigned int	i;
 }					t_fr;
 
+typedef	struct		s_img
+{
+	void			*win;
+	void			*img;
+	char			*data;
+	int				bpp;
+	int				size_line;
+	int				endian;
+	unsigned int	zoom;
+	double			move_x;
+	double			move_y;
+	double			cre;
+	double			cim;
+}					t_img;
+
 typedef struct		s_env
 {
 	int				r;
 	int				g;
 	int				b;
 	void			*mlx;
-	void			*win;
 	int				win_y;
 	int				win_x;
-	void			*img;
-	char			*data;
-	int				bpp;
-	int				size_line;
-	int				endian;
+	t_img			img;
+	t_fr			f;
 }					t_env;
 
 #endif
