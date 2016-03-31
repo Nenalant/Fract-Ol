@@ -52,14 +52,6 @@ int		ft_strlen(char *s)
 	return(i);
 }
 
-int		key_hook(int keycode, t_env *e)
-{
-	printf("%i\n", keycode);
-	(void)e;
-	if (keycode == 53)
-		exit (0);
-	return (0);
-}
 
 void	init_color_black(t_env *e, int x, int y)
 {
@@ -77,62 +69,40 @@ void	init_color(t_env *e, t_fr *f, int x, int y)
 	put_image(e, x, y);
 }
 
-void	init_formul(t_fr *f)
-{
-	f->x1 = -2.1;
-	f->x2 = 0.6;
-	f->y1 = -1.2;
-	f->y2 = 1.2;
-	f->i_max = 150;
-}
-
-void	init_formul_2(t_env *e, t_fr *f, t_img img)
-{
-	f->i = 0;	
-	e->img.move_x = 0;
-	e->img.move_y = 0;
-	e->img.zoom = 1;
-	e->img.cre = 0;
-	e->img.cim = 0;
-	f->z_r = img.cre;
-	f->z_i = img.cim;
-	f->img_x = (f->x2 - f->x1) * e->img.zoom;
-	f->img_y = (f->y2 - f->y1) * e->img.zoom;
-}
-
-void	mandel(t_env *e, t_fr f, int x, int y, t_img img)
-{
-	f.c_r = 2 * (x - e->win_x / 2) / (0.5 * e->img.zoom * e->win_x) + img.move_x;
-	f.c_i = (y - e->win_y / 2) / (0.5 * e->img.zoom * e->win_y) + img.move_y;
-
-	while (f.i < f.i_max)
-	{
-		f.oldr = f.z_r;
-		f.oldi = f.z_i;
-		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + f.c_r;
-		f.z_i = (2 * f.oldr * f.oldi) + f.c_i;
-		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
-			break ;
-		f.i++;
-	}
-	if (f.i != f.i_max)
-		init_color(e, &f, y, x);
-	else
-		init_color_black(e, y, x);
-}
-
-// void	julia(t_env *e, int x, int y, t_img img)
+// void	init_formul_mandel(t_fr *f)
 // {
-// 	t_fr 	f;
-// 	init_formul(&f);
-// 	init_formul_2(e, &f, x, y);
+// 	f->x1 = -2.1;
+// 	f->x2 = 0.6;
+// 	f->y1 = -1.2;
+// 	f->y2 = 1.2;
+// 	f->i_max = 50;
+// }
+
+// void	init_formul_mandel_2(t_env *e, t_fr *f, t_img img)
+// {
+// 	f->i = 0;	
+// 	e->img.move_x = 0;
+// 	e->img.move_y = 0;
+// 	e->img.zoom = 1;
+// 	e->img.cre = 0;
+// 	e->img.cim = 0;
+// 	f->z_r = img.cre;
+// 	f->z_i = img.cim;
+// 	f->img_x = (f->x2 - f->x1) * e->img.zoom;
+// 	f->img_y = (f->y2 - f->y1) * e->img.zoom;
+// }
+
+// void	mandel(t_env *e, t_fr f, int x, int y, t_img img)
+// {
+// 	f.c_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
+// 	f.c_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
 
 // 	while (f.i < f.i_max)
 // 	{
 // 		f.oldr = f.z_r;
 // 		f.oldi = f.z_i;
-// 		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi);
-// 		f.z_i = (2 * f.oldr * f.oldi);
+// 		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + f.c_r;
+// 		f.z_i = (2 * f.oldr * f.oldi) + f.c_i;
 // 		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
 // 			break ;
 // 		f.i++;
@@ -143,6 +113,52 @@ void	mandel(t_env *e, t_fr f, int x, int y, t_img img)
 // 		init_color_black(e, y, x);
 // }
 
+void	init_formul_julia(t_fr *f)
+{
+	f->x1 = -1;
+	f->x2 = 1;
+	f->y1 = -1.2;
+	f->y2 = 1.2;
+	f->i_max = 150;
+}
+
+void	init_formul_julia_2(t_env *e, t_fr *f, t_img img)
+{
+	f->i = 0;	
+	e->img.move_x = 0;
+	e->img.move_y = 0;
+	e->img.zoom = 1;
+	e->img.cre = 0.28;
+	e->img.cim = 0.01;
+	f->z_r = img.cre;
+	f->z_i = img.cim;
+	f->img_x = (f->x2 - f->x1) * e->img.zoom;
+	f->img_y = (f->y2 - f->y1) * e->img.zoom;
+}
+
+void	julia(t_env *e, t_fr f, int x, int y, t_img img)
+{
+	init_formul_julia(&e->f);
+	init_formul_julia_2(e, &e->f, e->img);
+
+	f.z_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
+	f.z_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
+
+	while (f.i < f.i_max)
+	{
+		f.oldr = f.z_r;
+		f.oldi = f.z_i;
+		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + img.cre;
+		f.z_i = (2 * f.oldr * f.oldi) + img.cim;
+		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
+			break ;
+		f.i++;
+	}
+	if (f.i != f.i_max)
+		init_color(e, &f, y, x);
+	else
+		init_color_black(e, y, x);
+}
 
 void	draw(t_env *e, t_fr *f)
 {
@@ -161,7 +177,7 @@ void	draw(t_env *e, t_fr *f)
 		while (x < e->win_y)
 		{
 			// printf("5-2\n");
-			mandel(e, *f, y, x, e->img);
+			julia(e, *f, y, x, e->img);
 	 		x++;
 	 	}
 		y++;
@@ -176,18 +192,16 @@ void	mouse_more(t_env *e, int x, int y)
 
 	(void)x;
 	(void)y;
-	printf("zoom == %d\n", e->img.zoom);
+	// printf("zoom == %d\n", e->img.zoom);
 	h = 0.1;
-	if (e->img.zoom < 7)
-		e->img.zoom += 1;
+	e->img.zoom += 1;
 	// f->x1 = x - h;
 	// f->x2 = x + h;
 	// f->y1 = y - h;
 	// f->y2 = y + h;
-	//  // f->i_max = 300;
+	 // f->i_max += ;
 	// e->img.cre = x;
 	// e->img.cim = y;
-	put_img_to_win(e);
 }
 
 void	mouse_less(t_env *e, int x, int y)
@@ -196,7 +210,7 @@ void	mouse_less(t_env *e, int x, int y)
 
 	(void)x;
 	(void)y;
-	printf("zoom == %d\n", e->img.zoom);
+	// printf("zoom == %d\n", e->img.zoom);
 	h = 0.1;
 	if (e->img.zoom > 1)
 		e->img.zoom -= 1;
@@ -205,18 +219,39 @@ void	mouse_less(t_env *e, int x, int y)
 	// f->y1 = y - h;
 	// f->y2 = y + h;
 	// f->i_max = 300;
+}
+
+int		key_hook(int key, t_env *e)
+{
+	printf("%i\n", key);
+	if (key == 53)
+		exit (0);
+	else if (key == KEY_RIGHT)
+		e->img.move_x += 0.1;
+	else if (key == KEY_UP)
+		e->img.move_y -= 0.1;
+	else if (key == KEY_LEFT)
+		e->img.move_x -= 0.1;
+	else if (key == KEY_DOWN)
+		e->img.move_y += 0.1;
+	else if (key == KEY_PLUS)
+		++e->f.i_max;
+	else if (key == KEY_MINUS && e->f.i_max > 2)
+		--e->f.i_max;
+	draw(e, &e->f);
 	put_img_to_win(e);
+	return (0);
 }
 
 int		mouse_hook(int key, int x, int y, t_env *e)
 {
-	printf("%d / %d / %d\n", key, x, y);
+	// printf("%d / %d / %d\n", key, x, y);
 	if (key == 4)
 	{
 		// e->img.move_y -= -1;
 		mouse_more(e, x, y);
 	}
-	if (key == 5)
+	else if (key == 5)
 	{
 		// e->img.move_y -= -1;
 		mouse_less(e, x, y);
@@ -224,6 +259,7 @@ int		mouse_hook(int key, int x, int y, t_env *e)
 	// e->f.z_r = x;
 	// e->f.z_i = y;
 	draw(e, &e->f);
+	put_img_to_win(e);
 	return (0);
 }
 
@@ -231,14 +267,12 @@ int		main(int ac, char **av)
 {
 	t_env	e;
 
-	init_formul(&e.f);
-	init_formul_2(&e, &e.f, e.img);
 	if (ac == 3 || ac == 2)
 	{
 		init_struct(&e);
 		mlx_mouse_hook(e.img.win, mouse_hook, &e);
+		mlx_key_hook(e.img.win, key_hook, &e);
 		draw(&e, &e.f);
-		mlx_hook(e.img.win, 2, 3, key_hook, &e);
 		put_img_to_win(&e);
 		// mlx_expose_hook(e.win, put_img_to_win, &e);
 		mlx_loop(e.mlx);
