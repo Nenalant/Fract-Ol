@@ -117,6 +117,7 @@ typedef	struct		s_img
 
 typedef struct		s_env
 {
+	char			*name;
 	int				r;
 	int				g;
 	int				b;
