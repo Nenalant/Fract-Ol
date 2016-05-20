@@ -52,6 +52,19 @@ int		ft_strlen(char *s)
 	return(i);
 }
 
+int		ft_strcmp(char *s1, char *s2)
+{
+	int		i;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (s1[i] - s2[i]);
+}
 
 void	init_color_black(t_env *e, int x, int y)
 {
@@ -69,7 +82,7 @@ void	init_color(t_env *e, t_fr *f, int x, int y)
 	put_image(e, x, y);
 }
 
-void	init_formul_mandel(t_fr *f)
+void	init_formul_mandel_and_bs(t_fr *f)
 {
 	f->x1 = -2.1;
 	f->x2 = 0.6;
@@ -78,7 +91,7 @@ void	init_formul_mandel(t_fr *f)
 	f->i_max = 50;
 }
 
-void	init_formul_mandel_2(t_env *e, t_fr *f, t_img img)
+void	init_formul_mandel_and_bs_2(t_env *e, t_fr *f, t_img img)
 {
 	f->i = 0;	
 	e->img.move_x = 0;
@@ -102,6 +115,27 @@ void	mandel(t_env *e, t_fr f, int x, int y, t_img img)
 		f.oldr = f.z_r;
 		f.oldi = f.z_i;
 		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + f.c_r;
+		f.z_i = (2 * f.oldr * f.oldi) + f.c_i;
+		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
+			break ;
+		f.i++;
+	}
+	if (f.i != f.i_max)
+		init_color(e, &f, y, x);
+	else
+		init_color_black(e, y, x);
+}
+
+void	burning_ship(t_env *e, t_fr f, int x, int y, t_img img)
+{
+	f.c_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
+	f.c_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
+
+	while (f.i < f.i_max)
+	{
+		f.oldr = f.z_r;
+		f.oldi = f.z_i;
+		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + f.c_r;
 		f.z_i = fabs(2 * f.oldr * f.oldi) + f.c_i;
 		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
 			break ;
@@ -113,91 +147,139 @@ void	mandel(t_env *e, t_fr f, int x, int y, t_img img)
 		init_color_black(e, y, x);
 }
 
-// void	fractal_wall(t_env *e, t_fr f, int x, int y, t_img img)
-// {
-// 	f.c_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
-// 	f.c_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
+void	burning_ship_circular(t_env *e, t_fr f, int x, int y, t_img img)
+{
+	f.c_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
+	f.c_i = 2 * (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
 
-// 	while (f.i < f.i_max)
-// 	{
-// 		f.oldr = f.z_r;
-// 		f.oldi = f.z_i;
-// 		f.z_r = pow(f.oldr, 3) - (f.oldr * f.oldi * f.oldi) + f.c_r;
-// 		f.z_i = (3 * f.oldr * f.oldr * f.oldi) - pow(f.oldi, 3) + f.c_i;
-// 		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
-// 			break ;
-// 		f.i++;
-// 	}
-// 	if (f.i != f.i_max)
-// 		init_color(e, &f, y, x);
-// 	else
-// 		init_color_black(e, y, x);
-// }
+	while (f.i < f.i_max)
+	{
+		f.oldr = f.z_r;
+		f.oldi = f.z_i;
+		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + f.c_r;
+		f.z_i = fabs(2 * f.oldr * f.oldi) + f.c_i;
+		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
+			break ;
+		f.i++;
+	}
+	if (f.i != f.i_max)
+		init_color(e, &f, y, x);
+	else
+		init_color_black(e, y, x);
+}
 
-// void	burning_ship(t_env *e, t_fr f, int x, int y, t_img img)
-// {
-// 	f.c_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
-// 	f.c_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
+void	fractal_wall(t_env *e, t_fr f, int x, int y, t_img img)
+{
+	f.c_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
+	f.c_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
 
-// 	while (f.i < f.i_max)
-// 	{
-// 		f.oldr = f.z_r;
-// 		f.oldi = f.z_i;
-// 		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + f.c_r;
-// 		f.z_i = fabs(2 * f.oldr * f.oldi) + f.c_i;
-// 		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
-// 			break ;
-// 		f.i++;
-// 	}
-// 	if (f.i != f.i_max)
-// 		init_color(e, &f, y, x);
-// 	else
-// 		init_color_black(e, y, x);
-// }
+	while (f.i < f.i_max)
+	{
+		f.oldr = f.z_r;
+		f.oldi = f.z_i;
+		f.z_r = pow(f.oldr, 3) - (f.oldr * f.oldi * f.oldi) + f.c_r;
+		f.z_i = (3 * f.oldr * f.oldr * f.oldi) - pow(f.oldi, 3) + f.c_i;
+		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
+			break ;
+		f.i++;
+	}
+	if (f.i != f.i_max)
+		init_color(e, &f, y, x);
+	else
+		init_color_black(e, y, x);
+}
 
-// void	init_formul_julia(t_fr *f)
-// {
-// 	f->x1 = -1;
-// 	f->x2 = 1;
-// 	f->y1 = -1.2;
-// 	f->y2 = 1.2;
-// 	f->i_max = 150;
-// }
+void	init_formul_julia(t_fr *f)
+{
+	f->x1 = -1;
+	f->x2 = 1;
+	f->y1 = -1.2;
+	f->y2 = 1.2;
+	f->i_max = 150;
+}
 
-// void	init_formul_julia_2(t_env *e, t_fr *f, t_img img)
-// {
-// 	f->i = 0;	
-// 	e->img.move_x = 0;
-// 	e->img.move_y = 0;
-// 	e->img.zoom = 1;
-// 	e->img.cre = 0.28;
-// 	e->img.cim = 0.01;
-// 	f->z_r = img.cre;
-// 	f->z_i = img.cim;
-// 	f->img_x = (f->x2 - f->x1) * e->img.zoom;
-// 	f->img_y = (f->y2 - f->y1) * e->img.zoom;
-// }
+void	init_formul_julia_2(t_env *e, t_fr *f, t_img img)
+{
+	f->i = 0;	
+	e->img.move_x = 0;
+	e->img.move_y = 0;
+	e->img.zoom = 1;
+	e->img.cre = 0.28;
+	e->img.cim = 0.01;
+	f->z_r = img.cre;
+	f->z_i = img.cim;
+	f->img_x = (f->x2 - f->x1) * e->img.zoom;
+	f->img_y = (f->y2 - f->y1) * e->img.zoom;
+}
 
-// void	julia(t_env *e, t_fr f, int x, int y, t_img img)
-// {
-// 	f.z_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
-// 	f.z_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
+void	julia_circular(t_env *e, t_fr f, int x, int y, t_img img)
+{
+	init_formul_julia(&f);
+	init_formul_julia_2(e, &f, img);
 
-// 	while (f.i < f.i_max)
-// 	{
-// 		f.oldr = f.z_r;
-// 		f.oldi = f.z_i;
-// 		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + img.cre;
-// 		f.z_i = (2 * f.oldr * f.oldi) + img.cim;
-// 		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
-// 			break ;
-// 		f.i++;
-// 	}
-// 	if (f.i != f.i_max)
-// 		init_color(e, &f, y, x);
-// 	else
-// 		init_color_black(e, y, x);
-// }
+	f.z_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
+	f.z_i = 2 * (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
+
+	while (f.i < f.i_max)
+	{
+		f.oldr = f.z_r;
+		f.oldi = f.z_i;
+		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + img.cre;
+		f.z_i = (2 * f.oldr * f.oldi) + img.cim;
+		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
+			break ;
+		f.i++;
+	}
+	if (f.i != f.i_max)
+		init_color(e, &f, y, x);
+	else
+		init_color_black(e, y, x);
+}
+
+void	julia(t_env *e, t_fr f, int x, int y, t_img img)
+{
+	init_formul_julia(&f);
+	init_formul_julia_2(e, &f, img);
+
+	f.z_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
+	f.z_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
+
+	while (f.i < f.i_max)
+	{
+		f.oldr = f.z_r;
+		f.oldi = f.z_i;
+		f.z_r = (f.oldr * f.oldr - f.oldi * f.oldi) + img.cre;
+		f.z_i = (2 * f.oldr * f.oldi) + img.cim;
+		if ((f.z_r * f.z_r + f.z_i * f.z_i) > 4)
+			break ;
+		f.i++;
+	}
+	if (f.i != f.i_max)
+		init_color(e, &f, y, x);
+	else
+		init_color_black(e, y, x);
+}
+
+void	choose_fractal(t_env *e, t_fr f, int y, int x)
+{
+	if ((ft_strcmp(e->name, "mandelbrot")) == 0)
+		mandel(e, f, y, x, e->img);
+	else if ((ft_strcmp(e->name, "burning_ship")) == 0) 
+		burning_ship(e, f, y, x, e->img);
+	else if ((ft_strcmp(e->name, "burning_ship_circular")) == 0)
+		burning_ship_circular(e, f, y, x, e->img);
+	else if ((ft_strcmp(e->name, "julia")) == 0) 
+		julia(e, f, y, x, e->img);
+	else if ((ft_strcmp(e->name, "julia_circular")) == 0) 
+		julia_circular(e, f, y, x, e->img);
+	else if ((ft_strcmp(e->name, "fractal_wall")) == 0)
+		fractal_wall(e, f, y, x, e->img);
+	else
+	{
+		PUT_STRING(2, "Error\nUsage:\n./fractol julia, mandelbrot or burning_ship\n");
+		exit(0);
+	}
+}
 
 void	draw(t_env *e, t_fr *f)
 {
@@ -213,8 +295,7 @@ void	draw(t_env *e, t_fr *f)
 		x = 0;
 		while (x < e->win_y)
 		{
-			if (e->name == "Mandelbrot") // strncmp
-				mandel(e, *f, y, x, e->img);
+			choose_fractal(e, *f, y, x);
 	 		x++;
 	 	}
 		y++;
@@ -298,33 +379,37 @@ int		mouse_hook(int key, int x, int y, t_env *e)
 
 void	init_formules(t_env *e)
 {
-	// init_formul_julia(&e->f);
-	// init_formul_julia_2(e, &e->f, e->img);
-	init_formul_mandel(&e->f);
-	init_formul_mandel_2(e, &e->f, e->img);
+	init_formul_mandel_and_bs(&e->f);
+	init_formul_mandel_and_bs_2(e, &e->f, e->img);
 }
 
 int		main(int ac, char **av)
 {
 	t_env	e;
 	init_formules(&e);
-	e.name = av[2];
+	e.name = av[1];
 
 	if (ac == 3 || ac == 2)
 	{
-		init_struct(&e);
-		mlx_mouse_hook(e.img.win, mouse_hook, &e);
-		mlx_hook(e.img.win, 2, 3, key_hook, &e);
-		draw(&e, &e.f);
-		put_img_to_win(&e);
-		// mlx_expose_hook(e.win, put_img_to_win, &e);
-		mlx_loop(e.mlx);
+		if (ft_strcmp(av[1], "mandelbrot") != 0
+			&& ft_strcmp(av[1], "burning_ship") != 0
+			&& ft_strcmp(av[1], "burning_ship_circular") != 0
+			&& ft_strcmp(av[1], "julia") != 0
+			&& ft_strcmp(av[1], "julia_circular") != 0
+			&& ft_strcmp(av[1], "fractal_wall") != 0)
+		{
+			init_struct(&e);
+			mlx_mouse_hook(e.img.win, mouse_hook, &e);
+			mlx_hook(e.img.win, 2, 3, key_hook, &e);
+			draw(&e, &e.f);
+			put_img_to_win(&e);
+			// mlx_expose_hook(e.win, put_img_to_win, &e);
+			mlx_loop(e.mlx);
+		}
 	}
 	else
 	{
-		PUT_STRING(2, "Error\nUsage: ");
-		write(2, av[0], ft_strlen(av[0]));
-		PUT_STRING(2, " Julia, Mandelbrot or Modulo");
+		PUT_STRING(2, "Error\nUsage: ./fractol mandelbrot, burning_ship or julia");
 		PUT_STRING(2, "\n");
 	}
 	return (0);

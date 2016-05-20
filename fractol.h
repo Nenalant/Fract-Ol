@@ -19,8 +19,8 @@
 # include <unistd.h>
 # include <math.h>
 
-# define WIDTH 600
-# define HEIGHT 400
+# define WIDTH 800
+# define HEIGHT 600
 # define PUT_STRING(fd, s) (write(fd, s, sizeof(s) - 1))
 
 # define KEY_A 0
@@ -63,8 +63,8 @@
 # define KEY_DOWN 125
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define KEY_PLUS 69
-# define KEY_MINUS 78
+# define KEY_PLUS 44 //69
+# define KEY_MINUS 24 //78
 # define KEY_R 15
 # define KEY_W 13
 # define KEY_S 1
