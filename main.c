@@ -33,7 +33,8 @@ void	init_struct(t_env *e)
 	e->win_y = HEIGHT;
 	e->img.win = mlx_new_window(e->mlx, e->win_x, e->win_y, "FRACT'OL");
 	e->img.img = mlx_new_image(e->mlx, e->win_x, e->win_y);
-	e->img.data = mlx_get_data_addr(e->img.img, &e->img.bpp, &e->img.size_line, &e->img.endian);
+	e->img.data = mlx_get_data_addr(e->img.img, &e->img.bpp, &e->img.size_line,
+		&e->img.endian);
 }
 
 int		put_img_to_win(t_env *e)
@@ -276,7 +277,7 @@ void	choose_fractal(t_env *e, t_fr f, int y, int x)
 		fractal_wall(e, f, y, x, e->img);
 	else
 	{
-		PUT_STRING(2, "Error\nUsage:\n./fractol julia, mandelbrot or burning_ship\n");
+		PUT_STRING(2, "ERROR\nUsage:\n./fractol julia, mandelbrot or burning_ship\n");
 		exit(0);
 	}
 }
@@ -359,7 +360,7 @@ int		key_hook(int key, t_env *e)
 
 int		mouse_hook(int key, int x, int y, t_env *e)
 {
-	// printf("%d / %d / %d\n", key, x, y);
+	printf("%d / %d / %d\n", key, x, y);
 	if (key == 4)
 	{
 		// e->img.move_y -= -1;
@@ -377,6 +378,11 @@ int		mouse_hook(int key, int x, int y, t_env *e)
 	return (0);
 }
 
+// int		mouse_motion(int x, int y, t_env *e)
+// {
+
+// }
+
 void	init_formules(t_env *e)
 {
 	init_formul_mandel_and_bs(&e->f);
@@ -392,11 +398,11 @@ int		main(int ac, char **av)
 	if (ac == 3 || ac == 2)
 	{
 		if (ft_strcmp(av[1], "mandelbrot") != 0
-			&& ft_strcmp(av[1], "burning_ship") != 0
-			&& ft_strcmp(av[1], "burning_ship_circular") != 0
-			&& ft_strcmp(av[1], "julia") != 0
-			&& ft_strcmp(av[1], "julia_circular") != 0
-			&& ft_strcmp(av[1], "fractal_wall") != 0)
+			|| ft_strcmp(av[1], "burning_ship") != 0
+			|| ft_strcmp(av[1], "burning_ship_circular") != 0
+			|| ft_strcmp(av[1], "julia") != 0
+			|| ft_strcmp(av[1], "julia_circular") != 0
+			|| ft_strcmp(av[1], "fractal_wall") != 0)
 		{
 			init_struct(&e);
 			mlx_mouse_hook(e.img.win, mouse_hook, &e);
@@ -409,7 +415,7 @@ int		main(int ac, char **av)
 	}
 	else
 	{
-		PUT_STRING(2, "Error\nUsage: ./fractol mandelbrot, burning_ship or julia");
+		PUT_STRING(2, "ERROR\nUsage: ./fractol mandelbrot, burning_ship or julia");
 		PUT_STRING(2, "\n");
 	}
 	return (0);

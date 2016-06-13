@@ -63,8 +63,8 @@
 # define KEY_DOWN 125
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define KEY_PLUS 44 //69
-# define KEY_MINUS 24 //78
+# define KEY_PLUS 69 //44
+# define KEY_MINUS 78 //24
 # define KEY_R 15
 # define KEY_W 13
 # define KEY_S 1
