@@ -31,6 +31,8 @@ void	init_struct(t_env *e)
 	}
 	e->win_x = WIDTH;
 	e->win_y = HEIGHT;
+	e->old_x = 0;
+	e->old_y = 0;
 	e->img.win = mlx_new_window(e->mlx, e->win_x, e->win_y, "FRACT'OL");
 	e->img.img = mlx_new_image(e->mlx, e->win_x, e->win_y);
 	e->img.data = mlx_get_data_addr(e->img.img, &e->img.bpp, &e->img.size_line,
@@ -215,9 +217,6 @@ void	init_formul_julia_2(t_env *e, t_fr *f, t_img img)
 
 void	julia_circular(t_env *e, t_fr f, int x, int y, t_img img)
 {
-	init_formul_julia(&f);
-	init_formul_julia_2(e, &f, img);
-
 	f.z_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
 	f.z_i = 2 * (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
 
@@ -239,9 +238,6 @@ void	julia_circular(t_env *e, t_fr f, int x, int y, t_img img)
 
 void	julia(t_env *e, t_fr f, int x, int y, t_img img)
 {
-	init_formul_julia(&f);
-	init_formul_julia_2(e, &f, img);
-
 	f.z_r = 2 * (x - e->win_x / 2) / (0.5 * img.zoom * e->win_x) + img.move_x;
 	f.z_i = (y - e->win_y / 2) / (0.5 * img.zoom * e->win_y) + img.move_y;
 
@@ -277,7 +273,9 @@ void	choose_fractal(t_env *e, t_fr f, int y, int x)
 		fractal_wall(e, f, y, x, e->img);
 	else
 	{
-		PUT_STRING(2, "ERROR\nUsage:\n./fractol julia, mandelbrot or burning_ship\n");
+		PUT_STRING(2, "ERROR\nUsage: ./fractol mandelbrot, burning_ship, ");
+		PUT_STRING(2, "burning_ship_circular, julia, julia_circular ");
+		PUT_STRING(2, "or fractal_wall\n");
 		exit(0);
 	}
 }
@@ -378,15 +376,29 @@ int		mouse_hook(int key, int x, int y, t_env *e)
 	return (0);
 }
 
-// int		mouse_motion(int x, int y, t_env *e)
-// {
-
-// }
+int		mouse_motion(int x, int y, t_env *e)
+{
+	if (e->old_x > x)
+		e->img.cre -= 0.008;
+	else if (e->old_x < x)
+		e->img.cre += 0.008;
+	if (e->old_y > y)
+		e->img.cim -= 0.008;
+	else if (e->old_y < y)
+		e->img.cim += 0.008;
+	e->old_x = x;
+	e->old_y = y;
+	draw(e, &e->f);
+	put_img_to_win(e);
+	return (0);
+}
 
 void	init_formules(t_env *e)
 {
 	init_formul_mandel_and_bs(&e->f);
 	init_formul_mandel_and_bs_2(e, &e->f, e->img);
+	init_formul_julia(&e->f);
+	init_formul_julia_2(e, &e->f, e->img);
 }
 
 int		main(int ac, char **av)
@@ -395,7 +407,7 @@ int		main(int ac, char **av)
 	init_formules(&e);
 	e.name = av[1];
 
-	if (ac == 3 || ac == 2)
+	if (ac == 2)
 	{
 		if (ft_strcmp(av[1], "mandelbrot") != 0
 			|| ft_strcmp(av[1], "burning_ship") != 0
@@ -407,15 +419,18 @@ int		main(int ac, char **av)
 			init_struct(&e);
 			mlx_mouse_hook(e.img.win, mouse_hook, &e);
 			mlx_hook(e.img.win, 2, 3, key_hook, &e);
+			mlx_hook(e.img.win, 6, 1 << 6, mouse_motion, &e);
 			draw(&e, &e.f);
 			put_img_to_win(&e);
-			// mlx_expose_hook(e.win, put_img_to_win, &e);
+			// mlx_expose_hook(e.img.win, put_img_to_win, &e);
 			mlx_loop(e.mlx);
 		}
 	}
 	else
 	{
-		PUT_STRING(2, "ERROR\nUsage: ./fractol mandelbrot, burning_ship or julia");
+		PUT_STRING(2, "ERROR\nUsage: ./fractol mandelbrot, burning_ship, ");
+		PUT_STRING(2, "burning_ship_circular, julia, julia_circular ");
+		PUT_STRING(2, "or fractal_wall");
 		PUT_STRING(2, "\n");
 	}
 	return (0);

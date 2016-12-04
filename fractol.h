@@ -124,6 +124,8 @@ typedef struct		s_env
 	void			*mlx;
 	int				win_y;
 	int				win_x;
+	int				old_x;
+	int				old_y;
 	t_img			img;
 	t_fr			f;
 }					t_env;
