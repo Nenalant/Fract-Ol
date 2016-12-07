@@ -80,7 +80,7 @@
 # define KEY_NUM_8 91
 # define KEY_NUM_9 92
 
-typedef struct 		s_fr
+typedef struct		s_fr
 {
 	unsigned int	x;
 	unsigned int	y;
@@ -129,5 +129,69 @@ typedef struct		s_env
 	t_img			img;
 	t_fr			f;
 }					t_env;
+
+/*
+** main
+*/
+void	choose_fractal(t_env *e, t_fr f, int y, int x);
+int		red_cross(t_env *e);
+void	main_error(void);
+int		main(int ac, char **av);
+
+/*
+** ft
+*/
+int		ft_strlen(char *s);
+int		ft_strcmp(char *s1, char *s2);
+
+/*
+** init_func
+*/
+void	init_struct(t_env *e);
+void	init_formules(t_env *e, char *av);
+
+/*
+** mandelbrot
+*/
+void	init_formul_mandel_and_bs(t_fr *f);
+void	init_formul_mandel_and_bs_2(t_env *e, t_fr *f);
+void	mandel(t_env *e, t_fr f, int x, int y);
+
+/*
+** julia
+*/
+void	init_formul_julia(t_fr *f);
+void	init_formul_julia_2(t_env *e, t_fr *f);
+void	julia_circular(t_env *e, t_fr f, int x, int y);
+void	julia(t_env *e, t_fr f, int x, int y);
+
+/*
+** burning_ship
+*/
+void	burning_ship(t_env *e, t_fr f, int x, int y);
+void	burning_ship_circular(t_env *e, t_fr f, int x, int y);
+
+/*
+** fractal_wall
+*/
+void	fractal_wall(t_env *e, t_fr f, int x, int y);
+
+/*
+** draw
+*/
+void	init_color_black(t_env *e, int x, int y);
+void	init_color(t_env *e, t_fr *f, int x, int y);
+void	draw(t_env *e, t_fr *f);
+void	put_image(t_env *e, int x, int y);
+int		put_img_to_win(t_env *e);
+
+/*
+** event
+*/
+void	mouse_more(t_env *e, int x, int y);
+void	mouse_less(t_env *e, int x, int y);
+int		key_hook(int key, t_env *e);
+int		mouse_hook(int key, int x, int y, t_env *e);
+int		mouse_motion(int x, int y, t_env *e);
 
 #endif
