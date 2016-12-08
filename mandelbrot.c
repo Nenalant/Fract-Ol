@@ -37,7 +37,7 @@ void	init_formul_mandel_and_bs_2(t_env *e, t_fr *f)
 
 void	mandel(t_env *e, t_fr f, int x, int y)
 {
-	f.c_r = 1.5 * (x - e->win_x / 2)
+	f.c_r = 1.3 * (x - e->win_x / 2)
 		/ (0.5 * e->img.zoom * e->win_x) + e->img.move_x;
 	f.c_i = (y - e->win_y / 2) / (0.5 * e->img.zoom * e->win_y) + e->img.move_y;
 	while (f.i < f.i_max)

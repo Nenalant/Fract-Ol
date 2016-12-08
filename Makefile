@@ -20,21 +20,25 @@ MINILIBX = -I./minilibx_macos minilibx_macos/libmlx.a
 all: mlx $(NAME)
 
 $(NAME): $(OBJ)
-	gcc $(FLAGS) $(LFLAGS) $(MINILIBX) -o $@ $^
+	@gcc $(FLAGS) $(LFLAGS) $(MINILIBX) -o $@ $^
+	@echo "COMPILATION DONE"
 
 %.o: %.c
-	gcc $(FLAGS) -c $(INC) $< -o $@
+	@gcc $(FLAGS) -c $(INC) $< -o $@
 
 mlx:
 	@make -C minilibx_macos/
+	@echo "MLX COMPILATED"
 
 clean:
-	@rm $(OBJ)
+	@rm -f $(OBJ)
+	@echo "CLEAN DONE"
 
 fclean: clean
-	@rm -rf $(NAME)
+	@rm -f $(NAME)
 	@make -C minilibx_macos/ clean
+	@echo "FCLEAN DONE"
 
 re: fclean all
 
-.PHONY: clean
+.PHONY: all mlx clean fclean re

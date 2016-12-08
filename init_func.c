@@ -19,6 +19,7 @@ void	init_struct(t_env *e)
 		PUT_STRING(2, "error environement");
 		exit(0);
 	}
+	e->val = 0;
 	e->win_x = WIDTH;
 	e->win_y = HEIGHT;
 	e->old_x = 0;
@@ -32,8 +33,18 @@ void	init_struct(t_env *e)
 void	init_formules(t_env *e, char *av)
 {
 	e->name = av;
-	init_formul_mandel_and_bs(&e->f);
-	init_formul_mandel_and_bs_2(e, &e->f);
-	init_formul_julia(&e->f);
-	init_formul_julia_2(e, &e->f);
+	if (ft_strcmp(av, "mandelbrot") == 0
+		|| ft_strcmp(av, "burning_ship") == 0
+		|| ft_strcmp(av, "burning_ship_circular") == 0
+		|| ft_strcmp(av, "fractal_wall") == 0)
+	{
+		init_formul_mandel_and_bs(&e->f);
+		init_formul_mandel_and_bs_2(e, &e->f);
+	}
+	else if (ft_strcmp(av, "julia") == 0
+		|| ft_strcmp(av, "julia_circular") == 0)
+	{
+		init_formul_julia(&e->f);
+		init_formul_julia_2(e, &e->f);
+	}
 }

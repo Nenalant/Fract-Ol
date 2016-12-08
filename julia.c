@@ -18,7 +18,7 @@ void	init_formul_julia(t_fr *f)
 	f->x2 = 1;
 	f->y1 = -1.2;
 	f->y2 = 1.2;
-	f->i_max = 50;
+	f->i_max = 150;
 }
 
 void	init_formul_julia_2(t_env *e, t_fr *f)
