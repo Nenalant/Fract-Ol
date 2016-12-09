@@ -28,9 +28,9 @@ void	choose_fractal(t_env *e, t_fr f, int y, int x)
 		fractal_wall(e, f, y, x);
 	else
 	{
-		PUT_STRING(2, "ERROR\nUsage: ./fractol mandelbrot, burning_ship, ");
-		PUT_STRING(2, "burning_ship_circular, julia, julia_circular ");
-		PUT_STRING(2, "or fractal_wall\n");
+		PUT_STRING(2, "ERROR\nUsage:\n./fractol mandelbrot\n\tburning_ship\n");
+		PUT_STRING(2, "\tburning_ship_circular\n\tjulia\n\tjulia_circular\n");
+		PUT_STRING(2, "\tfractal_wall\n");
 		exit(0);
 	}
 }
@@ -44,9 +44,9 @@ int		red_cross(t_env *e)
 
 void	main_error(void)
 {
-	PUT_STRING(2, "ERROR\nUsage: ./fractol mandelbrot, burning_ship, ");
-	PUT_STRING(2, "burning_ship_circular, julia, julia_circular ");
-	PUT_STRING(2, "or fractal_wall");
+	PUT_STRING(2, "ERROR\nUsage:\n./fractol mandelbrot\n\tburning_ship\n");
+	PUT_STRING(2, "\tburning_ship_circular\n\tjulia\n\tjulia_circular\n");
+	PUT_STRING(2, "\tfractal_wall");
 	PUT_STRING(2, "\n");
 }
 
@@ -54,7 +54,6 @@ int		main(int ac, char **av)
 {
 	t_env	e;
 
-	init_formules(&e, av[1]);
 	if (ac == 2)
 	{
 		if (ft_strcmp(av[1], "mandelbrot") != 0
@@ -64,6 +63,7 @@ int		main(int ac, char **av)
 			|| ft_strcmp(av[1], "julia_circular") != 0
 			|| ft_strcmp(av[1], "fractal_wall") != 0)
 		{
+			init_formules(&e, av[1]);
 			init_struct(&e);
 			mlx_mouse_hook(e.img.win, mouse_hook, &e);
 			mlx_hook(e.img.win, 2, 3, key_hook, &e);
