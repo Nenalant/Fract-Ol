@@ -28,9 +28,12 @@ void	choose_fractal(t_env *e, t_fr f, int y, int x)
 		fractal_wall(e, f, y, x);
 	else
 	{
-		PUT_STRING(2, "ERROR\nUsage:\n./fractol mandelbrot\n\tburning_ship\n");
-		PUT_STRING(2, "\tburning_ship_circular\n\tjulia\n\tjulia_circular\n");
-		PUT_STRING(2, "\tfractal_wall\n");
+		PUT_STRING(2, "\nUSAGE:\nEnter exec :\tChoose a fractal :\t\tOptions :\n\n");
+		PUT_STRING(2, "./fractol\tmandelbrot\t\t\tarrow keys or gamer keys moves\n");
+		PUT_STRING(2, "\t\tburning_ship\t\t\t+ and - : increase or decrease the ");
+		PUT_STRING(2, "psychedelic effect\n\t\tburning_ship_circular\n\t\t");
+		PUT_STRING(2, "fractal_wall\n\t\tjulia\t\t\t->\tmouse motion: stop motion:1, ");
+		PUT_STRING(2, "put it back:2\n\t\tjulia_circular\n\n");
 		exit(0);
 	}
 }
@@ -44,10 +47,12 @@ int		red_cross(t_env *e)
 
 void	main_error(void)
 {
-	PUT_STRING(2, "ERROR\nUsage:\n./fractol mandelbrot\n\tburning_ship\n");
-	PUT_STRING(2, "\tburning_ship_circular\n\tjulia\n\tjulia_circular\n");
-	PUT_STRING(2, "\tfractal_wall");
-	PUT_STRING(2, "\n");
+	PUT_STRING(2, "\nUSAGE:\nEnter exec :\tChoose a fractal :\t\tOptions :\n\n");
+	PUT_STRING(2, "./fractol\tmandelbrot\t\t\tarrow keys or gamer keys moves\n");
+	PUT_STRING(2, "\t\tburning_ship\t\t\t+ and - : increase or decrease the ");
+	PUT_STRING(2, "psychedelic effect\n\t\tburning_ship_circular\n\t\t");
+	PUT_STRING(2, "fractal_wall\n\t\tjulia\t\t\t->\tmouse motion: stop motion:1, ");
+	PUT_STRING(2, "put it back:2\n\t\tjulia_circular\n\n");
 }
 
 int		main(int ac, char **av)
